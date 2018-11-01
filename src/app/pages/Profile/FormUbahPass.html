@@ -1,0 +1,46 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Change Password - Form</h3>
+                <button type="button" class="toast-close-button"  data-dismiss="dialog" style="color: #616161" ng-click="$close()">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" ng-init="params=false">
+                    <div class=" form-group row clearfix has-feedback">
+                        <label class="col-sm-4">Old Password</label>
+                        <div class="col-md-8">
+                            <input type="{{passlama}}" class="form-control" ng-model="form.password_lama" ng-readonly="!control">
+                            <span ng-if="form.password_lama"  ng-click="hideShowPassword('pass_lama')" ng-class="passlama=='text'?'glyphicon glyphicon-eye-close form-control-feedback':'glyphicon glyphicon-eye-open form-control-feedback'"></span>
+                        </div>
+                    </div>
+                    <div class=" form-group row clearfix has-feedback">
+                        <label class="col-sm-4">New Password</label>
+                        <div class="col-md-8">
+                            <input type="{{passbaru}}" class="form-control" ng-model="form.password_baru" ng-readonly="!control">
+                            <span ng-if="form.password_baru"  ng-click="hideShowPassword('pass_baru')" ng-class="passbaru=='text'?'glyphicon glyphicon-eye-close form-control-feedback':'glyphicon glyphicon-eye-open form-control-feedback'"></span>
+                        </div>
+                    </div>
+                    <div class=" form-group row clearfix has-feedback">
+                        <label class="col-sm-4">Confirmation Password</label>
+                        <div class="col-md-8">
+                            <input type="{{confirm}}" class="form-control" ng-model="form.confirm" ng-readonly="!control">
+                            <span ng-if="form.confirm"  ng-click="hideShowPassword('confirm')" ng-class="confirm=='text'?'glyphicon glyphicon-eye-close form-control-feedback':'glyphicon glyphicon-eye-open form-control-feedback'"></span>
+                            <p class="red-text">{{msg1}}</p>
+                        </div>
+                    </div>
+                    <div class=" form-group row clearfix">
+                        <label class="col-sm-4"></label>
+                        <div class="col-md-8">
+                            <button class="btn btn-custom pull-right col-xs-6 col-md-2" ng-click="saveUbahPass()"><i class="fa fa-save"></i> Save</button>
+                            <button class="btn btn-default pull-right col-xs-6 col-md-2" ng-click="$close();"><i class="fa fa-close"></i> Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

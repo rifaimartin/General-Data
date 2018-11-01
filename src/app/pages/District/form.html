@@ -1,0 +1,82 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-heading panel-lia">
+                <h3 class="panel-title">District - Form</h3>
+                <button type="button" class="toast-close-button" data-dismiss="dialog" ng-click="$close()">
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" ng-submit="submit();control= false;edit=true;">
+                    <div class="form-group row clearfix">
+                        <label class="col-sm-2">Province</label>
+                        <div class="col-md-10">
+                            <div class="input-group">
+                                <ui-select ng-model="form.listProvince" lass="form-control" theme="bootstrap" ng-disabled="!control" ng-change="getCity(form.listProvince.Id)" required>
+                                    <ui-select-match placeholder="Select Province">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="p in province | filter: $select.search | orderBy:'Name'">
+                                        <div ng-bind-html="p.Name | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="refresh('unit')" ng-disabled='!control  || form.Active==false || disablebranch'>
+                                        <i class="glyphicon glyphicon-refresh blue" ng-class="{'gly-spin':spinunit==true,abu:form.Active==false}"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row clearfix">
+                        <label class="col-sm-2">City/District</label>
+                        <div class="col-md-10">
+                            <div class="input-group">
+                                <ui-select ng-model="form.listCity" lass="form-control" theme="bootstrap" ng-readonly="!control" required>
+                                    <ui-select-match placeholder="Select City/District">{{$select.selected.Name}}</ui-select-match>
+                                    <ui-select-choices repeat="p in city | filter: $select.search">
+                                        <div ng-bind-html="p.Name | highlight: $select.search"></div>
+                                    </ui-select-choices>
+                                </ui-select>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="refresh('unit')" ng-disabled='!control  || form.Active==false || disablebranch'>
+                                        <i class="glyphicon glyphicon-refresh blue" ng-class="{'gly-spin':spinunit==true,abu:form.Active==false}"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row cleafix">
+                        <label class="col-sm-2">District</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" ng-model="form.Name" ng-readonly="!control" required>
+                        </div>
+                    </div>
+                    <div class="form-group row clearfix">
+                        <label class="col-sm-4"></label>
+                        <div class="col-md-8">
+                            <!-- Control Button -->
+                            <div ng-show="control">
+                                <button ng-disabled="loading" type="submit" class="btn btn-custom margin-left pull-right col-xs-6 col-md-3">
+                                    <i class="fa fa-save"></i> Save</button>
+                                <button ng-disabled="loading" ng-show='edits == false' type="button" class="btn btn-default pull-right col-xs-6 col-md-3"
+                                    ng-click="$close()">
+                                    <i class="fa fa-close"></i> Cancel</button>
+                                <button ng-click="control = !control" type="button" ng-show='edits == true' class="btn btn-default pull-right col-xs-6 col-md-3">
+                                    <i class="fa fa-close"></i> Cancel</button>
+                            </div>
+                            <div ng-show="!control">
+                                <button ng-disabled="loading" ng-click="edits = true;control = !control;add=false;" type="button" class="btn btn-custom margin-left pull-right col-xs-6 col-md-3">
+                                    <i class="fa fa-edit"></i> Edit</button>
+                                <button ng-disabled="loading" class="btn btn-default pull-right col-xs-6 col-md-3" type="button" ng-click="$close()">
+                                    <i class="fa fa-arrow-left"></i> Close</button>
+                            </div>
+                            <!-- Control Button End -->
+                        </div>
+                    </div>
+                    <!-- Control Button -->
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

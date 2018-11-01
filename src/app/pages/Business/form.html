@@ -1,0 +1,378 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-heading panel-lia">
+                <h3 class="panel-title">Business Partner - Form</h3>
+                <button type="button" class="toast-close-button" data-dismiss="dialog" ng-click="$close()">
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" ng-class="form.Active==false?'bg-merah-bata':''" ng-submit="submit()">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4">Unit</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="form.listUnit" lass="form-control" theme="bootstrap"
+                                        ng-disabled="!control || form.Active==false || disablebranch" ng-change="getBranch(form.listUnit.Id);">
+                                        <ui-select-match placeholder="Select Unit">{{$select.selected.Code}}</ui-select-match>
+                                        <ui-select-choices repeat="list in unit | filter: $select.search">
+                                            <div ng-bind-html="list.Code| highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="refresh('unit')"
+                                            ng-disabled='!control  || form.Active==false || disablebranch'>
+                                            <i class="glyphicon glyphicon-refresh blue" ng-class="{'gly-spin':spinunit==true,abu:form.Active==false}"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4">Branch</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="form.listBranch" lass="form-control" theme="bootstrap"
+                                        ng-disabled="!control || disablebranch || form.Active==false || form.listUnit.Id == undefined"
+                                        ng-change="getEmployeeStructure()">
+                                        <ui-select-match placeholder="Select Branch">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="list in branch | filter: $select.search">
+                                            <div ng-bind-html="list.Name| highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="refresh('branch',form.listUnit.Id)"
+                                            ng-disabled='!control || disablebranch || form.Active==false'>
+                                            <i class="glyphicon glyphicon-refresh blue" ng-class="{'gly-spin':spinbranch==true,abu:form.Active==false}"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4">BP Code</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" ng-change="previewEmployeeStructure()" ng-model="form.Code"
+                                    ng-readonly="!control || form.Active==false">
+                                <span class="bs-invalid-msg help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4">BP Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" ng-change="previewEmployeeStructure()" ng-model="form.Name"
+                                    ng-readonly="!control || form.Active==false">
+                                <span class="bs-invalid-msg help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4">Type</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="form.business" lass="form-control" theme="bootstrap"
+                                        ng-disabled="!control">
+                                        <ui-select-match placeholder="Select Branch Type">{{$select.selected.Value}}</ui-select-match>
+                                        <ui-select-choices repeat="business in business | filter: $select.search">
+                                            <div ng-bind-html="business.Value | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="refresh('business')"
+                                            ng-disabled='!control || disablebusiness || form.Active==false'>
+                                            <i class="glyphicon glyphicon-refresh blue" ng-class="{'gly-spin':spintype==true,abu:form.Active==false}"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row cleafix">
+                            <label class="col-sm-4 ">Unit Of LIA</label>
+                            <div class="col-md-8">
+                                <!-- <label class="checkbox-inline custom-checkbox nowrap"> -->
+                                <input type="checkbox" ng-model="form.IsLiaUnit" ng-disabled="!control">
+                                <!-- <span></span> -->
+                                <!-- </label> -->
+                                <br>
+                            </div>
+                        </div>
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4" ng-hide="!form.IsLiaUnit || !control">Associated Unit</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="form.AssociatedLiaUnit" lass="form-control" theme="bootstrap"
+                                        ng-hide="!form.IsLiaUnit || !control">
+                                        <ui-select-match placeholder="Select Associated Unit">{{$select.selected.Code}}</ui-select-match>
+                                        <ui-select-choices repeat="AssociatedLiaUnit in unit | filter: $select.search">
+                                            <div ng-bind-html="AssociatedLiaUnit.Code| highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="refresh('unit')"
+                                            ng-hide='!form.IsLiaUnit || !control'>
+                                            <i class="glyphicon glyphicon-refresh blue" ng-class="{'gly-spin':spinunit==true,abu:form.Active==false}"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4"  ng-hide="!form.IsLiaUnit || !control">Associated Branch</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="form.AssociatedLiaBranch" lass="form-control" theme="bootstrap"
+                                        ng-hide="!form.IsLiaUnit || !control">
+                                        <ui-select-match placeholder="Select Associated Branch">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="AssociatedLiaBranch in branch | filter: $select.search">
+                                            <div ng-bind-html="AssociatedLiaBranch.Name| highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="refresh('branch',form.listUnit.Id)"
+                                            ng-hide='!form.IsLiaUnit || !control'>
+                                            <i class="glyphicon glyphicon-refresh blue" ng-class="{'gly-spin':spinbranch==true,abu:form.Active==false}"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <!--    <div class="form-group row clearfix">
+                            <label class="col-sm-4">AR Account</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="form.ArAccount" lass="form-control" theme="bootstrap" ng-disabled="!control">
+                                        <ui-select-match placeholder="Select AR Account">[{{$select.selected.Code}}] {{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="ArAccount in finance | filter: $select.search">
+                                            <div ng-bind-html="'['+ArAccount.Code+']'+' '+ArAccount.Name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                      <button type="button" class="btn btn-default" ng-click="refresh('finance')" ng-disabled='!control || disablebranch || form.Active==false'>
+                                           <i class="glyphicon glyphicon-refresh blue" ng-class="{'gly-spin':spinfinance==true,abu:form.Active==false}"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div> -->
+                        <!--    <div class="form-group row clearfix">
+                            <label class="col-sm-4">AP Account</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="form.ApAccount" lass="form-control" theme="bootstrap" ng-disabled="!control || disablebranch || form.Active==false">
+                                        <ui-select-match placeholder="Select AP Account">[{{$select.selected.Code}}] {{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="ApAccount in finance | filter: $select.search">
+                                            <div ng-bind-html="'['+ApAccount.Code+']'+' '+ApAccount.Name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="refresh('finance')" ng-disabled='!control || disablebranch || form.Active==false'>
+                                           <i class="glyphicon glyphicon-refresh blue" ng-class="{'gly-spin':spinfinance==true,abu:form.Active==false}"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4">Phone</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" ng-model="form.PhoneNo" ng-readonly="!control || form.Active==false">
+                            </div>
+                        </div>
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4">Email</label>
+                            <div class="col-sm-8">
+                                <input type="email" class="form-control" ng-model="form.Email" ng-readonly="!control || form.Active==false">
+                                <span class="bs-invalid-msg help-block"></span>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4">Tax Payer No.</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" ng-model="form.NpwpNo" ng-readonly="!control || form.Active==false">
+                            </div>
+                        </div>
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4">Tax Payer Domicile </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" ng-change="previewEmployeeStructure()" ng-model="form.Domisili"
+                                    ng-readonly="!control || form.Active==false">
+                                <span class="bs-invalid-msg help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4">Tax Account Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" ng-change="previewEmployeeStructure()" ng-model="form.FakturName"
+                                    ng-readonly="!control || form.Active==false">
+                                <span class="bs-invalid-msg help-block"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4">Address</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control" ng-model="form.Address" ng-readonly="!control || form.Active==false"></textarea>
+                                <span class="bs-invalid-msg help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4">Province</label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="form.listProvince" lass="form-control" theme="bootstrap"
+                                        ng-disabled="!control || form.Active==false" ng-change="getCity(form.listProvince.Id)">
+                                        <ui-select-match placeholder="Select Province">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="list in province | filter: $select.search | orderBy:'Name'">
+                                            <div ng-bind-html="list.Name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="refresh('province')"
+                                            ng-disabled='!control || form.Active==false'>
+                                            <i class="glyphicon glyphicon-refresh blue" ng-class="{'gly-spin':spinprovince==true,abu:form.Active==false}"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4">City/Municipality</label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="form.listCity" lass="form-control" theme="bootstrap"
+                                        ng-disabled="!control || form.Active==false || form.listProvince.Id == undefined"
+                                        ng-change="getDistrict(form.listCity.Id)">
+                                        <ui-select-match placeholder="Select City/Municipality">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="list in city | filter: $select.search">
+                                            <div ng-bind-html="list.Name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="refresh('city',form.listProvince.Id)"
+                                            ng-disabled="!control || form.Active==false || form.listProvince.Id == undefined">
+                                            <i class="glyphicon glyphicon-refresh blue" ng-class="{'gly-spin':spincity==true,abu:form.Active==false}"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4">District</label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="form.listDistrict" lass="form-control" theme="bootstrap"
+                                        ng-disabled="!control || form.Active==false || form.listCity.Id == undefined"
+                                        ng-change="getKelurahan(form.listDistrict.Id)">
+                                        <ui-select-match placeholder="Select District">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="list in district | filter: $select.search">
+                                            <div ng-bind-html="list.Name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="refresh('subdistrict',form.listCity.Id)"
+                                            ng-disabled='!control || form.Active==false || form.listCity.Id == undefined'>
+                                            <i class="glyphicon glyphicon-refresh blue" ng-class="{'gly-spin':spinsubdistrict==true,abu:form.Active==false}"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4">Sub-District</label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <ui-select ng-model="form.listVillage" lass="form-control" theme="bootstrap"
+                                        ng-disabled="!control || form.Active==false || form.listDistrict.Id == undefined">
+                                        <ui-select-match placeholder="Select Sub-District">{{$select.selected.Name}}</ui-select-match>
+                                        <ui-select-choices repeat="list in kelurahan | filter: $select.search">
+                                            <div ng-bind-html="list.Name | highlight: $select.search"></div>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" ng-click="refresh('village',form.listDistrict.Id)"
+                                            ng-disabled='!control || form.Active==false || form.listDistrict.Id == undefined'>
+                                            <i class="glyphicon glyphicon-refresh blue" ng-class="{'gly-spin':spinvillage==true,abu:form.Active==false}"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4">Postal Code</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="form.PostalCode" ng-readonly="!control || form.Active==false"
+                                    maxlength="5">
+                                <span class="bs-invalid-msg help-block"></span>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group row clearfix" ng-if="!control">
+                            <label class="col-sm-4">AR Balance</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="form.ArBalance" ng-readonly="!control || form.Active==false"
+                                    maxlength="5">
+                                <span class="bs-invalid-msg help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row clearfix" ng-if="!control">
+                            <label class="col-sm-4">AP Balance</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="form.ApBalance" ng-readonly="!control || form.Active==false"
+                                    maxlength="5">
+                                <span class="bs-invalid-msg help-block"></span>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4">Contact Person</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="form.ContactPerson" ng-readonly="!control || form.Active==false"
+                                    maxlength="12">
+                                <span class="bs-invalid-msg help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4">Contact Person Phone</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" ng-model="form.ContactPersonPhoneNo"
+                                    ng-readonly="!control || form.Active==false" maxlength="12">
+                                <span class="bs-invalid-msg help-block"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group row clearfix">
+                            <label class="col-sm-4"></label>
+                            <div class="col-md-9">
+                                <!-- Control Button -->
+                                <div ng-show="control">
+                                    <button ng-show="!add" ng-click="edits = true;control = !control;doEdit();" class="btn btn-custom margin-left pull-right col-xs-6 col-md-3">
+                                        <i class="fa fa-save"></i> Save</button>
+                                    <button ng-show="add" ng-click="edits = true;control = !control;doSave();" class="btn btn-custom margin-left pull-right col-xs-6 col-md-3">
+                                        <i class="fa fa-save"></i> Save</button>
+                                    <button ng-show='edits == false' ng-click="$close()" class="btn btn-default pull-right col-xs-6 col-md-3">
+                                        <i class="fa fa-close"></i> Cancel</button>
+                                    <button ng-click="control = !control" ng-show='edits == true' class="btn btn-default pull-right col-xs-6 col-md-3">
+                                        <i class="fa fa-close"></i> Cancel</button>
+                                </div>
+                                <div ng-show="!control">
+                                    <button ng-click="edits = true;control = !control;add=false;" class="btn btn-custom margin-left pull-right col-xs-6 col-md-3">
+                                        <i class="fa fa-edit"></i> Edit</button>
+                                    <button ng-click="$close()" class="btn btn-default pull-right col-xs-6 col-md-3">
+                                        <i class="fa fa-arrow-left"></i> Close</button>
+                                </div>
+                                <!-- Control Button End -->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

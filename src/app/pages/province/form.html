@@ -1,0 +1,46 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-heading panel-lia">
+                <h3 class="panel-title">Province - Form</h3>
+                <button type="button" class="toast-close-button" data-dismiss="dialog" ng-click="$close()">
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" ng-submit="submit();control= false;edit=true;">
+                    <div class="form-group row clearfix">
+                        <label class="col-sm-2">Provinsi</label>
+                        <div class="col-md-10">
+                            <input type="text" class="form-control" ng-model="form.Name" ng-readonly="!control" required>
+                        </div>
+                    </div>
+                    <div class="form-group row clearfix">
+                        <label class="col-sm-4"></label>
+                        <div class="col-md-8">
+                            <!-- Control Button -->
+                            <div ng-show="control">
+                                <button ng-disabled="loading" type="submit" class="btn btn-custom margin-left pull-right col-xs-6 col-md-3">
+                                    <i class="fa fa-save"></i> Save</button>
+                                <button ng-disabled="loading" ng-show='edits == false' type="button" class="btn btn-default pull-right col-xs-6 col-md-3"
+                                    ng-click="$close()">
+                                    <i class="fa fa-close"></i> Cancel</button>
+                                <button ng-click="control = !control" type="button" ng-show='edits == true' class="btn btn-default pull-right col-xs-6 col-md-3">
+                                    <i class="fa fa-close"></i> Cancel</button>
+                            </div>
+                            <div ng-show="!control">
+                                <button ng-disabled="loading" ng-click="edits = true;control = !control;add=false;" type="button" class="btn btn-custom margin-left pull-right col-xs-6 col-md-3">
+                                    <i class="fa fa-edit"></i> Edit</button>
+                                <button ng-disabled="loading" class="btn btn-default pull-right col-xs-6 col-md-3" type="button" ng-click="$close()">
+                                    <i class="fa fa-arrow-left"></i> Close</button>
+                            </div>
+                            <!-- Control Button End -->
+                        </div>
+                    </div>
+                    <!-- Control Button -->
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

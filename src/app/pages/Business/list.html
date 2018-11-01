@@ -1,0 +1,113 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Business Partner - List</h3>
+                <content-top></content-top>
+            </div>
+            <div class="panel-body">
+                <div class="btn-group">
+                    <button class="btn btn-custom example-responsive" data-toggle="modal" ng-click="refreshTable()">
+                        <i class="glyphicon glyphicon-refresh" ng-class="spin==true?'gly-spin':''"></i>
+                    </button>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-custom btn-with-icon example-responsive" data-toggle="modal" ng-click="behaviour_add();showForm();form.Active=true;">
+                        <i class="fa fa-file-text-o"></i>
+                        <span>Create</span>
+                    </button>
+                </div>
+                <div class="btn-group">
+                    <button ng-show="(selected.length > 0)" class="btn btn-success btn-with-icon example-responsive">
+                        <i class="fa fa-check"></i>
+                        <span>Approve</span>
+                    </button>
+                    <button ng-show="(selected.length > 0)" class="btn btn-warning btn-with-icon example-responsive">
+                        <i class="fa fa-close"></i>
+                        <span>Reject</span>
+                    </button>
+                </div>
+                <div class="btn-group">
+                    <button ng-show="(selected.length > 0)" ng-click="openDelete();" class="btn btn-danger btn-with-icon example-responsive">
+                        <i class="fa fa-trash"></i>
+                        <span>Delete</span>
+                    </button>
+                </div>
+                <div st-table="data" st-pipe="callServer" st-safe-src="data">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover custom-table">
+                            <thead>
+                                <tr class="sortable">
+                                    <th class="v-align" st-ratio="20" st-sort="id" rowspan="2" st-sort-default="false">No</th>
+                                    <th class="select-width">Select</th>
+                                    <th st-sort="UnitName">Unit</th>
+                                    <th st-sort="BranchName">Branch</th>
+                                    <th st-sort="BranchCode">Code</th>
+                                    <th st-sort="Name">Name</th>
+                                    <th st-sort="BusinessPartnerTypeValue">Type</th>
+                                    <th st-sort="IsLiaUnit">Unit Of Lia</th>
+                                </tr>
+                                <tr>
+                                    <th row-select-all="data" selected="selected" ng-click="selectAll(data)"></th>
+                                    <th>
+                                        <input st-search="UnitName" ng-model="FilterUnitName" ng-change="changeFilter()" type="tetxt" class="form-control custom-control">
+                                    </th>
+                                    <th>
+                                        <input st-search="BranchName" ng-model="FilterName" ng-change="changeFilter()" type="text" class="form-control custom-control">
+                                    </th>
+                                    <th>
+                                        <input st-search="BranchCode" ng-model="FilterUnitCode" ng-change="changeFilter()" type="text" class="form-control custom-control">
+                                    </th>
+                                    <th>
+                                        <input st-search="Name" ng-model="FilterBranchName" ng-change="changeFilter()" type="text" class="form-control custom-control">
+                                    </th>
+                                    <th>
+                                        <input st-search="BusinessPartnerTypeValue" ng-model="FilterBranchName" ng-change="changeFilter()" type="text" class="form-control custom-control">
+                                    </th>
+                                    <th>
+                                        <select st-search="IsLiaUnit" ng-model="filterReg" ng-change="changeFilter()" class="form-control custom-control">
+                                            <option value="">Show All</option>
+                                            <option value="true">Yes</option>
+                                            <option value="false">No</option>
+                                        </select>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody ng-show="!isLoading">
+                                <tr ng-repeat="s in (results =(data | filter:key))" context-menu="menuOptions" data-id="{{s.Id}}" ng-class="$index %2 ==0?'table-strip':' '">
+                                    <td ng-click="showForm();behaviour_view();view_object(s.Id);">{{((page-1)*10)+$index+1}}</td>
+                                    <td row-select="s" ng-click="select(s.Id)" class="v-align row-select"></td>
+                                    <td ng-click="showForm();behaviour_view();view_object(s.Id);">{{s.UnitName}}</td>
+                                    <td ng-click="showForm();behaviour_view();view_object(s.Id);">{{s.BranchName}}</td>
+                                    <td ng-click="showForm();behaviour_view();view_object(s.Id);">{{s.Code}}</td>
+                                    <td ng-click="showForm();behaviour_view();view_object(s.Id);">{{s.Name}}</td>
+                                    <td ng-click="showForm();behaviour_view();view_object(s.Id);">{{s.BusinessPartnerTypeValue}}</td>
+                                    <td ng-click="showForm();behaviour_view();view_object(s.Id);">{{s.IsLiaUnit==true?'Yes':'No'}}</td>
+                                   <!--  <td ng-click="showForm();behaviour_view();view_object(s.Id);">
+                                       <span ng-if="s.Active == 1" ng-class="s.Active == 0?'red-siyn':'green-asiyn'">Active</span>
+                                       <span ng-if="s.Active == 0" ng-class="s.Active == 0?'red-siyn':'green-siyn'">Not Active</span>
+                                   </td> -->
+                                    <!-- <td ng-click="showForm();behaviour_view();view_object(s.Id);">
+                                         <span ng-if="s.status_persetujuan == 1" ng-class="s.status_persetujuan == 0?'red-siyn':'green-siyn'">FINAL APPROVED</span>
+                                         <span ng-if="s.status_persetujuan == 0" ng-class="s.status_persetujuan == 0?'red-siyn':'green-siyn'">NOT APPROVED</span>
+                                     </td> --> 
+                                </tr>
+                                <tr ng-if="results.length ==  0">
+                                    <td colspan="12">Data not found</td>
+                                </tr>
+                            </tbody>
+                            <tbody ng-show="isLoading">
+                                <tr>
+                                    <td colspan="12">
+                                        <div class="loading-indicator"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pull-right" st-pagination="" st-items-by-page="dataPageSize" st-displayed-pages="5"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
